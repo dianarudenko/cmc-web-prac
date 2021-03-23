@@ -1,0 +1,30 @@
+ <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+
+<suite name="TestNG Tests">
+    <test name="Client tests">
+        <classes>
+            <class name="ClientTest">
+                <methods>
+                    <include name="addClientTest"/>
+                    <include name="findClientTest"/>
+                    <include name="deleteClientTest"/>
+                    <include name="updateClientTest"/>
+                </methods>
+            </class>
+            <class name="ServicesClientsTest">
+                <methods>
+                    <include name="getAllServicesForClientTest"/>
+                    <include name="disableServiceForClientTest"/>
+                </methods>
+            </class>
+            <class name="TransactionTest">
+                <methods>
+                    <include name="getAllByBillTest"/>
+                    <include name="getAllByBillAndDateTest"/>
+                </methods>
+            </class>
+            <class name="BillTest"/>
+            <class name="ServiceTest"/>
+        </classes>
+    </test>
+</suite>

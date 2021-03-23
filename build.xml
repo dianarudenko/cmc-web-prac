@@ -1,0 +1,96 @@
+<?xml version="1.0"?>
+<project name="Web-server" basedir=".">
+    <property file="build.properties"/>
+    <target name="create-db">
+        <sql classpath="${postgresql.classpath}"
+            driver="${postgresql.driver}"
+            url="${postgresql.localhost}"
+            userid="${postgresql.user}"
+            password="${postgresql.password}"
+            autocommit="True"
+            src="${db.dir}/create_db.sql"
+        />
+    </target>
+    <target name="init-db">
+        <sql classpath="${postgresql.classpath}"
+            driver="${postgresql.driver}"
+            url="${postgresql.localhost}${postgresql.database}"
+            userid="${postgresql.user}"
+            password="${postgresql.password}"
+            autocommit="True"
+            src="${db.dir}/init_db.sql"
+        />
+    </target>
+    <target name="populate-db">
+        <sql classpath="${postgresql.classpath}"
+            driver="${postgresql.driver}"
+            url="${postgresql.localhost}${postgresql.database}"
+            userid="${postgresql.user}"
+            password="${postgresql.password}"
+            autocommit="True"
+            src="${db.dir}/populate_db.sql"
+        />
+    </target>
+    <target name="drop-tables">
+        <sql classpath="${postgresql.classpath}"
+            driver="${postgresql.driver}"
+            url="${postgresql.localhost}"
+            userid="${postgresql.user}"
+            password="${postgresql.password}"
+            autocommit="True"
+            src="${db.dir}/drop_tables.sql"
+        />
+    </target>
+    <target name="drop-db">
+        <sql classpath="${postgresql.classpath}"
+            driver="${postgresql.driver}"
+            url="${postgresql.localhost}"
+            userid="${postgresql.user}"
+            password="${postgresql.password}"
+            autocommit="True"
+            src="${db.dir}/drop_db.sql"
+        />
+    </target>
+    <target name="setup-db" depends="drop-tables, drop-db, create-db, init-db, populate-db"/>
+
+    <path id="build.classpath">
+        <fileset dir="${lib.dir}" includes="**/*.jar"/>
+        <pathelement path="${main.build.dir}"/>
+        <pathelement path="${resources.dir}"/>
+    </path>
+
+    <target name="build" depends="setup-db">
+        <mkdir dir="${build.dir}/main"/>
+        <javac includeantruntime="false"
+               source="${jdk.version}" target="${jdk.version}"
+               srcdir="${src.dir}" destdir="${main.build.dir}"
+               classpathref="build.classpath"
+        />
+        <mkdir dir="${test.build.dir}"/>
+        <javac includeantruntime="false"
+               source="${jdk.version}" target="${jdk.version}"
+               srcdir="${test.dir}" destdir="${test.build.dir}"
+               classpathref="build.classpath"
+        />
+    </target>
+
+    <taskdef name="testng" classname="org.testng.TestNGAntTask" classpath="lib/testng-7.4.0.jar"/>
+
+    <target name="test" depends="build">
+        <path id="test.classpath">
+            <pathelement path="${test.build.dir}"/>
+        </path>
+        <testng mode="mixed" classpathref="test.classpath">
+            <classpath>
+                <fileset dir="${lib.dir}" includes="**/*.jar"/>
+                <pathelement path="${main.build.dir}"/>
+                <pathelement path="${resources.dir}"/>
+            </classpath>
+            <xmlfileset dir="." includes="testng.xml"/>
+        </testng>
+    </target>
+
+    <target name="clean">
+        <delete dir="${build.dir}"/>
+    </target>
+</project>

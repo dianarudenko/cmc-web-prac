@@ -2,7 +2,7 @@
 Web application of billing system for a mobile operator
 
 # Схема БД
-![Схема БД](db_scheme.png)
+![Схема БД](db/db_scheme.png)
 
 # Описание страниц
 0. **Верхнее меню** (на всех страницах)

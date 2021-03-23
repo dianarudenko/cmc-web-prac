@@ -1,0 +1,1 @@
+CREATE DATABASE "web-server" WITH ENCODING 'UTF-8';
