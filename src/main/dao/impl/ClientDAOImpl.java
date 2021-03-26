@@ -2,6 +2,7 @@ package dao.impl;
 
 import java.util.List;
 
+import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 
 import org.hibernate.Transaction;
@@ -23,9 +24,12 @@ public class ClientDAOImpl extends BasicDAOImpl<Client, Integer> implements Clie
             Client result = query.getSingleResult();
             transaction.commit();
             return result;
-        } catch(Exception e) {
-            transaction.commit();
+        } catch(NoResultException e) {
+            transaction.rollback();
             return null;
+        } catch(Exception e) {
+            transaction.rollback();
+            throw e;
         }
     }
 
@@ -41,7 +45,7 @@ public class ClientDAOImpl extends BasicDAOImpl<Client, Integer> implements Clie
                     ).setParameter("n", name);
                 } else if (name == null) {
                     query = getCurrentSession().createQuery(
-                        "SELECT cl FROM Client cl WHERE name = :n and surname = :s"
+                        "SELECT cl FROM Client cl WHERE surname = :s"
                     ).setParameter("s", surname);
                 } else {
                     query = getCurrentSession().createQuery(
@@ -76,8 +80,8 @@ public class ClientDAOImpl extends BasicDAOImpl<Client, Integer> implements Clie
             transaction.commit();
             return result;
         } catch(Exception e) {
-            transaction.commit();
-            return null;
+            transaction.rollback();
+            throw e;
         }
     }
 
@@ -91,9 +95,12 @@ public class ClientDAOImpl extends BasicDAOImpl<Client, Integer> implements Clie
             Client result = query.getSingleResult();
             transaction.commit();
             return result;
-        } catch(Exception e) {
-            transaction.commit();
+        } catch(NoResultException e) {
+            transaction.rollback();
             return null;
+        } catch(Exception e) {
+            transaction.rollback();
+            throw e;
         }
     }
 }

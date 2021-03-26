@@ -1,5 +1,6 @@
 package dao.impl;
 
+import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 
 import org.hibernate.Transaction;
@@ -21,9 +22,12 @@ public class BillDAOImpl extends BasicDAOImpl<Bill, Long> implements BillDAO {
             Bill result = query.getSingleResult();
             transaction.commit();
             return result;
-        } catch(Exception e) {
-            transaction.commit();
+        } catch(NoResultException e) {
+            transaction.rollback();
             return null;
+        } catch(Exception e) {
+            transaction.rollback();
+            throw e;
         }
     }
 }

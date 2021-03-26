@@ -27,8 +27,8 @@ public class ServicesClientsDAOImpl extends BasicDAOImpl<ServicesClients, Intege
             transaction.commit();
             return result;
         } catch(Exception e) {
-            transaction.commit();
-            return null;
+            transaction.rollback();
+            throw e;
         }
     }
 
@@ -45,7 +45,8 @@ public class ServicesClientsDAOImpl extends BasicDAOImpl<ServicesClients, Intege
             .executeUpdate();
             transaction.commit();
         } catch(Exception e) {
-            transaction.commit();
+            transaction.rollback();
+            throw e;
         }
     }
 }

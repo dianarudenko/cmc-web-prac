@@ -19,6 +19,7 @@ public class HibernateSessionFactoryUtil {
             } catch (Exception e) {
                 StandardServiceRegistryBuilder.destroy(registry);
                 System.err.println("ERROR: Failed to create session factory: " + e);
+                throw e;
             }
         }
         return sessionFactory;

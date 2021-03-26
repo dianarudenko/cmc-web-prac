@@ -45,7 +45,7 @@ public class BasicDAOImpl<T, K extends Serializable> implements BasicDAO<T, K> {
         try {
             item = getCurrentSession().get(type, id);
         } catch (Exception e) {
-            transaction.commit();
+            transaction.rollback();
         }
         transaction.commit();
         return item;
@@ -61,7 +61,7 @@ public class BasicDAOImpl<T, K extends Serializable> implements BasicDAO<T, K> {
             criteria.from(type);
             items = getCurrentSession().createQuery(criteria).getResultList();
         } catch (Exception e) {
-            transaction.commit();
+            transaction.rollback();
         }
         transaction.commit();
         return items;
@@ -73,7 +73,7 @@ public class BasicDAOImpl<T, K extends Serializable> implements BasicDAO<T, K> {
         try {
             getCurrentSession().save(obj);
         } catch (Exception e) {
-            transaction.commit();
+            transaction.rollback();
         }
         transaction.commit();
     }
@@ -84,7 +84,7 @@ public class BasicDAOImpl<T, K extends Serializable> implements BasicDAO<T, K> {
         try {
             getCurrentSession().update(obj);
         } catch (Exception e) {
-            transaction.commit();
+            transaction.rollback();
         }
         transaction.commit();
     }
@@ -95,7 +95,7 @@ public class BasicDAOImpl<T, K extends Serializable> implements BasicDAO<T, K> {
         try {
             getCurrentSession().delete(obj);
         } catch (Exception e) {
-            transaction.commit();
+            transaction.rollback();
         }
         transaction.commit();
     }

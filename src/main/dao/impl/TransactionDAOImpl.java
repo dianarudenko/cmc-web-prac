@@ -23,8 +23,8 @@ public class TransactionDAOImpl extends BasicDAOImpl<Transaction, Integer> imple
             transaction.commit();
             return result;
         } catch(Exception e) {
-            transaction.commit();
-            return null;
+            transaction.rollback();
+            throw e;
         }
     }
 
@@ -40,9 +40,8 @@ public class TransactionDAOImpl extends BasicDAOImpl<Transaction, Integer> imple
             transaction.commit();
             return result;
         } catch(Exception e) {
-            transaction.commit();
-            System.out.println(e);
-            return null;
+            transaction.rollback();
+            throw e;
         }
     }
 }
