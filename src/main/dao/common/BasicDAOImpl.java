@@ -9,94 +9,56 @@ import javax.persistence.criteria.CriteriaQuery;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
-import util.HibernateSessionFactoryUtil;
+// import util.HibernateSessionFactoryUtil;
 
+@Transactional
 @SuppressWarnings("unchecked")
 public class BasicDAOImpl<T, K extends Serializable> implements BasicDAO<T, K> {
     private final Class<T> type;
-    private static SessionFactory sessionFactory = HibernateSessionFactoryUtil.getSessionFactory();
+    // @Autowired
+    private static SessionFactory sessionFactory;// = HibernateSessionFactoryUtil.getSessionFactory();
+
+    @Autowired
+    public void setSessionFactory(SessionFactory newSessionFactory) {
+        sessionFactory = newSessionFactory;
+    }
 
     public BasicDAOImpl() {
         this.type = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
     }
 
     protected Session getCurrentSession() {
-        Session currentSession;
-        try {
-            currentSession = sessionFactory.getCurrentSession();
-        } catch (Exception e) {
-            currentSession = sessionFactory.openSession();
-        }
-        return currentSession;
-    }
-
-    // @Autowired
-    @Override
-    public void setSessionFactory(SessionFactory newSessionFactory) {
-        sessionFactory = newSessionFactory;
+        return sessionFactory.getCurrentSession();
     }
 
     @Override
     public T getByID(K id) {
-        Transaction transaction = getCurrentSession().beginTransaction();
-        T item = null;
-        try {
-            item = getCurrentSession().get(type, id);
-        } catch (Exception e) {
-            transaction.rollback();
-        }
-        transaction.commit();
-        return item;
+        return getCurrentSession().get(type, id);
     }
 
     @Override
     public List<T> getAll() {
-        Transaction transaction = getCurrentSession().beginTransaction();
-        List<T> items = null;
-        try {
-            CriteriaBuilder builder = getCurrentSession().getCriteriaBuilder();
-            CriteriaQuery<T> criteria = builder.createQuery(type);
-            criteria.from(type);
-            items = getCurrentSession().createQuery(criteria).getResultList();
-        } catch (Exception e) {
-            transaction.rollback();
-        }
-        transaction.commit();
-        return items;
+        CriteriaBuilder builder = getCurrentSession().getCriteriaBuilder();
+        CriteriaQuery<T> criteria = builder.createQuery(type);
+        criteria.from(type);
+        return getCurrentSession().createQuery(criteria).getResultList();
     }
 
     @Override
     public void add(T obj) {
-        Transaction transaction = getCurrentSession().beginTransaction();
-        try {
-            getCurrentSession().save(obj);
-        } catch (Exception e) {
-            transaction.rollback();
-        }
-        transaction.commit();
+        getCurrentSession().save(obj);
     }
 
     @Override
     public void update(T obj) {
-        Transaction transaction = getCurrentSession().beginTransaction();
-        try {
-            getCurrentSession().update(obj);
-        } catch (Exception e) {
-            transaction.rollback();
-        }
-        transaction.commit();
+        getCurrentSession().update(obj);
     }
 
     @Override
     public void delete(T obj) {
-        Transaction transaction = getCurrentSession().beginTransaction();
-        try {
-            getCurrentSession().delete(obj);
-        } catch (Exception e) {
-            transaction.rollback();
-        }
-        transaction.commit();
+        getCurrentSession().delete(obj);
     }
 }

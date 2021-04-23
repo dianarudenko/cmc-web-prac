@@ -5,11 +5,16 @@ import java.util.List;
 
 import javax.persistence.TypedQuery;
 
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
 import dao.TransactionDAO;
 import dao.common.BasicDAOImpl;
 import entity.Bill;
 import entity.Transaction;
 
+@Transactional
+@Repository
 @SuppressWarnings("unchecked")
 public class TransactionDAOImpl extends BasicDAOImpl<Transaction, Integer> implements TransactionDAO {
     @Override

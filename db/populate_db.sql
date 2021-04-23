@@ -1,4 +1,4 @@
-INSERT INTO clients (phone_number, name, surname, middle_name, bill) VALUES
+INSERT INTO clients (phone_number, surname, name, middle_name, bill) VALUES
 (   '+7(905)590-78-63',
     'Иванов',
     'Иван',

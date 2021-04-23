@@ -62,7 +62,7 @@
         <pathelement path="${resources.dir}"/>
     </path>
 
-    <target name="build" depends="setup-db">
+    <target name="build"> <!-- depends="setup-db" -->
         <mkdir dir="${build.dir}/main"/>
         <javac includeantruntime="false"
                debug="true"
@@ -107,7 +107,7 @@
         </copy>
 
         <copy todir = "${web.build.dir}">
-            <fileset dir="${web.dir}" includes = "resources/*.*"/>
+            <fileset dir="${web.dir}" includes = "**/*.*"/>
         </copy>
 
         <jar jarfile = "${web.build.dir}/${war.file}" basedir = "${web.build.dir}"/>

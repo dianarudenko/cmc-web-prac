@@ -6,12 +6,16 @@ import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 
 import org.hibernate.Transaction;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import dao.ClientDAO;
 import dao.common.BasicDAOImpl;
 import entity.Bill;
 import entity.Client;
 
+@Transactional
+@Repository
 @SuppressWarnings("unchecked")
 public class ClientDAOImpl extends BasicDAOImpl<Client, Integer> implements ClientDAO {
     @Override

@@ -4,11 +4,15 @@ import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 
 import org.hibernate.Transaction;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import dao.ServiceDAO;
 import dao.common.BasicDAOImpl;
 import entity.Service;
 
+@Transactional
+@Repository
 @SuppressWarnings("unchecked")
 public class ServiceDAOImpl extends BasicDAOImpl<Service, Integer> implements ServiceDAO {
     @Override
