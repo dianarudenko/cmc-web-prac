@@ -11,12 +11,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
 @Entity
@@ -28,26 +30,36 @@ public class Client implements Cloneable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @NotNull
     @Pattern(regexp = PHONE_NUMBER)
     private String phone_number;
 
-    public String name;
-    public String surname;
-    public String middle_name;
+    @NotNull
+    private String name;
+    @NotNull
+    private String surname;
+    @NotNull
+    private String middle_name;
 
-    @OneToOne(mappedBy = "client",
-              cascade = CascadeType.ALL,
+    @OneToOne(cascade = CascadeType.REMOVE,
               orphanRemoval = true,
               fetch = FetchType.LAZY)
     @JoinColumn(name = "bill")
-    private Bill bill;
+    private Bill bill = null;
 
     @OneToMany(mappedBy = "client",
-               cascade = CascadeType.ALL,
+               cascade = CascadeType.REMOVE,
                orphanRemoval = true,
                fetch = FetchType.EAGER)
     @OrderBy
     private List<ServicesClients> services = new ArrayList<>();
+
+    // private String assign_bill = null;
+
+    @ManyToOne
+    // @JoinColumn(name = "active_service")
+    // @Transient
+    private ServicesClients active_service = new ServicesClients();
 
     public Client() {}
 
@@ -113,6 +125,22 @@ public class Client implements Cloneable {
 
     public void setServices(List<ServicesClients> services) {
         this.services = services;
+    }
+
+    // public String getAssign_bill() {
+    //     return assign_bill;
+    // }
+
+    // public void setAssign_bill(String assign_bill) {
+    //     this.assign_bill = assign_bill;
+    // }
+
+    public ServicesClients getActive_service() {
+        return active_service;
+    }
+
+    public void setActive_service(ServicesClients active_service) {
+        this.active_service = active_service;
     }
 
     public void addService(Service service) {

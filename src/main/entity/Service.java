@@ -35,7 +35,7 @@ public class Service {
     @OneToMany(mappedBy = "service",
                cascade = CascadeType.ALL,
                orphanRemoval = true,
-               fetch = FetchType.LAZY)
+               fetch = FetchType.EAGER)
     @OrderBy
     private List<ServicesClients> clients = new ArrayList<>();
 

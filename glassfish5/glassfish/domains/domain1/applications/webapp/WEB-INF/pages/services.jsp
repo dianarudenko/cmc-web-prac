@@ -3,28 +3,25 @@
 <%@ include file="include.jsp" %>
 <!DOCTYPE html>
 
+<style><%@ include file="/resources/styles.css" %></style>
 <html>
     <head>
         <title>Услуги</title>
     </head>
     <body>
+        <%@ include file="/WEB-INF/pages/header.jsp" %>
         <main>
-            <table>
-                <caption><h2>Услуги</h2></caption>
-                <tr>
+            <table id="services-table">
+                <caption>
+                    <h2>Услуги</h2>
+                    <input class="form-control" type="text" placeholder="Поиск..." id="search-text" onkeyup="tableSearch()">
+                </caption>
+                <thead>
                     <th>ID</th>
                     <th>Название</th>
                     <th>Краткое описание</th>
                     <th>Стоимость</th>
-                    <th></th>
-                    <th></th>
-                </tr>
-                <%-- <tr>
-                    <td><input type="text" id="id" onkeyup="FilterFunction(0, id)" placeholder="Поиск по id..."></td>
-                    <td><input type="text" id="name" onkeyup="FilterFunction(1, id)" placeholder="Поиск по названию..."></td>
-                    <td><input type="text" id="description" onkeyup="FilterFunction(2, id)" placeholder="Поиск по описанию..."></td>
-                    <td><input type="text" id="cost" onkeyup="FilterFunction(3, id)" placeholder="Поиск по цене..."></td>
-                </tr> --%>
+                </thead>
                 <c:forEach var="service" items="${servicesList}">
                     <tr>
                         <td>
@@ -37,37 +34,54 @@
                                 ${service.name}
                             </a>
                         </td>
-                        <%-- <td>
-                            <fmt:formatDate value="${workPosition.service_id.hire_date}" pattern="dd.MM.yyyy г"/>
-                        </td> --%>
                         <td>
                             ${service.description}
                         </td>
                         <td>
                             ${service.cost}
                         </td>
+                        <td>
+                            <a href="delete_service?id=${service.id}">
+                                <form>
+                                    <input type="button" value="Удалить">
+                                </form>
+                            </a>
+                        </td>
+                        <td>
+                            <a href="edit_service?id=${service.id}">
+                                <form>
+                                    <input type="button" value="Изменить">
+                                </form>
+                            </a>
+                        </td>
                     </tr>
                 </c:forEach>
             </table>
+            <br>
+            <a href="add_service">
+                <input type="button" id="add_service" value="Добавить...">
+            </a>
         </main>
     </body>
 </html>
 <script>
-    function FilterFunction(id, input) {
-        var filter, table, tr, td, i, txtValue;
-        filter = document.getElementById(input).value.toUpperCase();
-        table = document.getElementById("WorkerTable");
-        tr = table.getElementsByTagName("tr");
-        for (i = 2; i < tr.length; ++i) {
-            td = tr[i].getElementsByTagName("td")[id];
-            if (td) {
-                txtValue = td.textContent || td.innerText;
-                if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                    tr[i].style.display = "";
-                } else {
-                    tr[i].style.display = "none";
-                }
+    function tableSearch() {
+        var phrase = document.getElementById('search-text');
+        var table = document.getElementById('services-table');
+        var regPhrase = new RegExp(phrase.value, 'i');
+        var flag = false;
+        for (var i = 0; i < table.rows.length; i++) {
+            flag = false;
+            for (var j = table.rows[i].cells.length - 1; j >= 0; j--) {
+                flag = regPhrase.test(table.rows[i].cells[j].innerHTML);
+                if (flag) break;
             }
+            if (flag) {
+                table.rows[i].style.display = "";
+            } else {
+                table.rows[i].style.display = "none";
+            }
+
         }
     }
 </script>

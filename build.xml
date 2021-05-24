@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<project name="Web-server" basedir="." xmlns:jacoco="antlib:org.jacoco.ant">
+<project name="Web-server" basedir="." xmlns:jacoco="antlib:org.jacoco.ant" default="startup">
     <property file="build.properties"/>
 
 
@@ -62,7 +62,7 @@
         <pathelement path="${resources.dir}"/>
     </path>
 
-    <target name="build"> <!-- depends="setup-db" -->
+    <target name="build" depends="setup-db" >
         <mkdir dir="${build.dir}/main"/>
         <javac includeantruntime="false"
                debug="true"
@@ -165,12 +165,13 @@
     </target>
 
 
-    <target name="redeploy" depends="undeploy, clean, clean-war, setup-db, build, build-war, deploy"/>
-    <target name="startup" depends="build, build-war, start-server, deploy"/>
+    <target name="redeploy" depends="undeploy, clean, clean-war, build, build-war, deploy"/>
+    <target name="startup" depends="stop-server, clean, build, build-war, start-server, deploy"/>
 
 
     <path id="test.classpath">
         <pathelement path="${test.build.dir}"/>
+        <pathelement path="${test.build.dir}/selenium"/>
     </path>
 
     <taskdef name="testng" classname="org.testng.TestNGAntTask" classpath="${lib.dir}/testng-7.4.0.jar"/>
@@ -208,5 +209,19 @@
             <html destdir="test-output/jacoco"/>
             <xml destfile="test-output/jacoco/report.xml"/>
         </jacoco:report>
+    </target>
+
+    <target name="web-test" depends="stop-server, startup">
+        <testng mode="mixed" classpathref="test.classpath">
+            <classpath refid="build.classpath"/>
+            <xmlfileset dir="${test.dir}/selenium/" includes="testng.xml"/>
+        </testng>
+    </target>
+
+    <target name="light-web-test" depends="redeploy">
+        <testng mode="mixed" classpathref="test.classpath">
+            <classpath refid="build.classpath"/>
+            <xmlfileset dir="${test.dir}/selenium/" includes="testng.xml"/>
+        </testng>
     </target>
 </project>

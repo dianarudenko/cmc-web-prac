@@ -30,7 +30,7 @@ INSERT INTO clients (phone_number, surname, name, middle_name, bill) VALUES
     10007856005
 );
 
-INSERT INTO bills (number, funds, active) VALUES
+INSERT INTO bills (id, funds, active) VALUES
 (   10007856001,
     583.00,
     true
@@ -52,9 +52,9 @@ INSERT INTO bills (number, funds, active) VALUES
     false
 );
 
-ALTER TABLE clients ADD FOREIGN KEY (bill) REFERENCES bills(number);
+ALTER TABLE clients ADD FOREIGN KEY (bill) REFERENCES bills(id);
 
-UPDATE bills SET client_id = clients.id FROM clients WHERE clients.bill = number;
+UPDATE bills SET client_id = clients.id FROM clients WHERE clients.bill = bills.id;
 
 INSERT INTO services (name, description, cost, active, creation_date, calls_min, internet_gb, sms_number) VALUES
 (   'Тариф "Малый"',

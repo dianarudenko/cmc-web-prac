@@ -6,12 +6,25 @@
         My super project!
     </title>
     <body>
-        It's alive!
+        <%@ include file="/WEB-INF/pages/header.jsp" %>
         <div>
-            <a href="services">Услуги</a>
+            <center>
+                <a href="services" id="services">
+                    <input type="button" value="Услуги">
+                </a>
+                <br>
+                Все услуги, предоставляемые компанией.
+            </center>
         </div>
+        <br>
         <div>
-            <a href="clients">Клиенты</a>
+            <center>
+                <a href="clients" id="clients">
+                    <input type="button" value="Клиенты">
+                </a>
+                <br>
+                Клиентская база компании.
+            </center>
         </div>
     </body>
 </html>

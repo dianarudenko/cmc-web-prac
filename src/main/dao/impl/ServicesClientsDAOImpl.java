@@ -36,6 +36,16 @@ public class ServicesClientsDAOImpl extends BasicDAOImpl<ServicesClients, Intege
         .setParameter("c", client)
         .setParameter("s", service)
         .executeUpdate();
+        client.setActive_service(null);
+    }
+
+    @Override
+    public void addServiceForClient (Service service, Client client) {
+        Date nowDate = new Date((new java.util.Date()).getTime());
+        ServicesClients servicesClients = new ServicesClients(client, service, nowDate, null);
+        if (client.getActive_service() != null)
+            disableServiceForClient(client.getActive_service().getService(), client);
+        add(servicesClients);
     }
 
     @Override

@@ -1,0 +1,18 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+
+<suite name="TestNG Tests" verbose="3">
+    <test name="Web tests">
+        <classes>
+            <class name="selenium.SysTest">
+                <methods>
+                    <!-- <include name="deleteClientTest"/>
+                    <include name="addClientTest"/>
+                    <include name="editClientTest"/>
+                    <include name="deleteServiceTest"/>
+                    <include name="addServiceTest"/>
+                    <include name="editServiceTest"/> -->
+                </methods>
+            </class>
+        </classes>
+    </test>
+</suite>

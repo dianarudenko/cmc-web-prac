@@ -8,8 +8,8 @@ CREATE TABLE IF NOT EXISTS clients (
 );
 
 CREATE TABLE IF NOT EXISTS bills (
-    number bigint PRIMARY KEY,
-    client_id integer REFERENCES clients(id) ON DELETE CASCADE,
+    id BIGSERIAL PRIMARY KEY,
+    client_id integer REFERENCES clients(id),
     funds numeric,
     active boolean
 );
@@ -30,7 +30,7 @@ CREATE TYPE trans_type AS ENUM ('incoming', 'outgoing');
 
 CREATE TABLE IF NOT EXISTS transactions (
     id SERIAL PRIMARY KEY,
-    bill bigint REFERENCES bills(number),
+    bill bigint REFERENCES bills(id),
     type trans_type,
     date timestamp,
     sum numeric
